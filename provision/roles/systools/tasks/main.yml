@@ -1,0 +1,16 @@
+---
+# tasks file for systools
+
+  - include_vars: "{{ ansible_distribution }}.yml"
+
+  - name: Remove rubbish
+    apt: pkg={{item}} state=absent
+    with_items:
+      - chef
+      - puppet
+    when: is_ubuntu
+
+  - name: Setup Miscellaneous
+    action: "{{ ansible_pkg_mgr }} name={{item}} state=installed"
+    with_items: systools_packages
+

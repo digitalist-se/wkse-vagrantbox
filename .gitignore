@@ -1,0 +1,10 @@
+.DS_Store
+nbproject
+._*
+web/*.*
+web/*/*
+!web/sites/*/files/README.txt
+!web/sites/*/settings.php
+.vagrant
+.idea
+

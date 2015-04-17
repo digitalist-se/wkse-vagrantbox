@@ -1,0 +1,5 @@
+---
+apache_service_name: apache2
+apache_service_conf_dir: /etc/apache2/sites-enabled/conf.d
+apache_service_dir: /etc/apache2
+apache_service_vhost_dir: /etc/apache2/sites-enabled

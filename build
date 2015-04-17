@@ -1,0 +1,14 @@
+#!/bin/bash
+# Execute `platform.make` which will clone Drupal core prepared
+# contribute to drupal org 
+
+# Removing web
+if [ -d web ]; then
+  echo "==> Chmoding web..."
+  chmod -R 777 web
+  echo "==> Removing web..."
+  rm -rf web
+fi
+
+drush make platform.make web --working-copy --debug -v
+

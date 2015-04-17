@@ -1,0 +1,55 @@
+---
+- include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Add the Google linux key (Ubuntu)
+  apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
+  when: is_ubuntu
+
+- name: Add Google Chrome respository (Ubuntu)
+  apt_repository: repo='deb http://dl.google.com/linux/chrome/deb/ stable main' update_cache=yes
+  when: is_ubuntu
+
+- name: Chrome Install-hack 1 (CentOS)
+  get_url: url=http://chrome.richardlloyd.org.uk/install_chrome.sh dest=/tmp/install_chrome.sh
+  when: is_centos
+
+- name: Chrome Install-hack 2 (CentOS)
+  file: path=/tmp/install_chrome.sh mode=755
+  when: is_centos
+
+- name: Chrome Install-hack 3 (CentOS)
+  shell: /tmp/install_chrome.sh -f -d
+  sudo: yes
+  when: is_centos
+
+- name: install linux packages
+  action: "{{ ansible_pkg_mgr }} pkg={{item}} state=installed"
+  with_items: chromedriver_packages
+
+- name: install pip packages
+  pip: name={{item}} state=present
+  with_items:
+    - selenium
+
+- name: download chromedriver
+  shell: wget -q --no-check-certificate https://chromedriver.storage.googleapis.com/$(wget -qO- --no-check-certificate https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
+
+- name: unzip chromedriver
+  shell: "unzip /home/vagrant/chromedriver_linux64.zip"
+
+- name: move chromedriver to /usr/local/bin
+  shell: "sudo mv chromedriver /usr/local/bin"
+
+- name: make chromdriver executable
+  shell: "chmod +x /usr/local/bin/chromedriver"
+
+- name: copy the xvfb.conf file
+  copy: src=xvfb.conf dest=/etc/init/xvfb.conf owner=root group=root mode=644 backup=yes
+
+- name: start the xvfb service
+  shell: start xvfb
+  ignore_errors: true
+
+- name: add DISPLAY environment variable export to .bashrc
+  lineinfile: dest=/home/vagrant/.bashrc line="export DISPLAY=:99"
+

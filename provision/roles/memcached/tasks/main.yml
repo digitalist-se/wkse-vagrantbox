@@ -1,0 +1,13 @@
+---
+
+  - name: Install memcached
+    action: "{{ ansible_pkg_mgr }} name={{ item }} state=installed"
+    with_items: memcached
+#    when: is_ubuntu
+#
+#
+#  - name: Install memcached (CentOS)
+#    yum: name={{ item }} state=latest
+#    with_items: memcached
+#    when: is_centos
+

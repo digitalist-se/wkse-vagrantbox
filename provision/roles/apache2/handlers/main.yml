@@ -1,0 +1,5 @@
+---
+# handlers file for apache2
+
+  - name: restart apache2
+    action: service name={{ apache_service_name }} pattern=/etc/init.d/{{apache_service_name }} state=restarted enabled=yes

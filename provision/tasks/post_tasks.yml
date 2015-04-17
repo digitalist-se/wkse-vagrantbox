@@ -1,0 +1,5 @@
+---
+# Postflight tasks for Ubuntu/Debian
+- name: Clean up apt
+  shell: apt-get autoremove -y
+  when: is_debian_or_ubuntu

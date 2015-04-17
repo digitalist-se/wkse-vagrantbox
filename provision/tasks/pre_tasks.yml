@@ -1,0 +1,40 @@
+---
+# Preflight tasks for CentOS
+
+
+- name: Ensure Python SELinux bindings installed
+  yum: name=libselinux-python state=latest update_cache=yes
+  when: is_centos
+
+- name: Disable selinux
+  selinux: state=disabled
+  when: is_centos
+
+- name: bootstrap epel-release install
+  copy: src=ansible-bootstrap-epel.repo
+        dest=/etc/yum.repos.d/
+        owner=root group=root mode=0644
+  when: is_centos
+
+- name: epel-release install
+  yum: name=epel-release
+       enablerepo=ansible-bootstrap-epel
+       state=present
+  when: is_centos
+
+- name: epel repository enable
+  ini_file: dest=/etc/yum.repos.d/epel.repo
+            section=epel
+            option=enabled
+            value=1
+  when: is_centos
+
+- name: Enable Webatic repo
+  shell: rpm -Uvh --replacepkgs https://mirror.webtatic.com/yum/el6/latest.rpm
+  when: is_centos
+
+  # Preflight tasks for Debian/Ubuntu
+
+- name: Update repos
+  shell: apt-get update
+  when: is_ubuntu

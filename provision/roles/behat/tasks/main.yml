@@ -1,0 +1,10 @@
+---
+# tasks file for behat
+
+- name: Add Behat repository
+  shell: composer global config repositories.behat vcs https://github.com/james75/Behat
+  sudo_user: "{{ composer_user }}"
+
+- name: Add Behat and Drupal extension
+  shell: composer global require behat/behat:"dev-formatter_junit_1 as 3.0.6" drupal/drupal-extension:master
+  sudo_user: "{{ composer_user }}"

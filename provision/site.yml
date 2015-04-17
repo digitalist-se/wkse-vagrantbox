@@ -1,0 +1,14 @@
+## YAML Template.
+---
+- hosts: all
+  pre_tasks:
+    - include: tasks/pre_tasks.yml
+  roles:
+    - varnish
+    - devbox
+    - selenium
+    - redis
+  vars_files:
+    - vars/os.yml
+  post_tasks:
+    - include: tasks/post_tasks.yml

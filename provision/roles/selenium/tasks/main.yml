@@ -1,0 +1,22 @@
+---
+# tasks file for selenium
+
+- name: create directory for selenium
+  shell: mkdir -p {{ selenium_dir }} creates={{ selenium_dir }}
+
+- name: Download Selenium
+  get_url: >
+    url=http://selenium-release.storage.googleapis.com/{{ ".".join(selenium_version.split(".")[:2]) }}/selenium-server-standalone-{{ selenium_version }}.jar
+    dest={{ selenium_dir }}/selenium-server-standalone-{{ selenium_version }}.jar
+
+- include: chromedriver.yml
+  when: with_chromedriver
+
+- include: phantomjs.yml
+  when: with_phantomjs
+
+- name: create init script
+  template:
+    src=selenium.j2
+    dest=/etc/init.d/selenium
+    owner=root group=root mode=0755

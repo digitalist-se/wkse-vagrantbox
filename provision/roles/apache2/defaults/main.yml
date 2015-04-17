@@ -1,0 +1,7 @@
+---
+# defaults file for apache2
+apache_service_https: false
+apache_service_http: true
+apache_service_http_port: 80
+apache_service_https_port: 443
+apache_service_conf_dir: /etc/httpd/conf.d

@@ -1,0 +1,7 @@
+---
+chromedriver_packages:
+  - python-pip
+  - python-dev
+  - zip
+  - xvfb
+  - google-chrome-stable

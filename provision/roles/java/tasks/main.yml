@@ -1,0 +1,6 @@
+---
+# tasks file for java
+
+- include_vars: "{{ ansible_distribution }}.yml"
+- name: install java
+  action: "{{ansible_pkg_mgr}} name={{java_jdk_package}} state=present"

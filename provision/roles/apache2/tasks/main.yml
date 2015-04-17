@@ -1,0 +1,27 @@
+---
+# tasks file for apache2
+- include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install Apache2
+  action: "{{ ansible_pkg_mgr }} name={{ apache_service_name }} state=installed"
+
+- shell: a2enmod rewrite
+  notify: restart apache2
+  when: is_ubuntu
+
+- file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+  when: is_ubuntu
+
+- template:
+    src=vhost.j2
+    dest={{ apache_service_vhost_dir }}/drupal.conf
+    owner=root group=root mode=0644
+  notify: restart apache2
+  when: apache_service_http
+
+- template:
+    src=ports.conf
+    dest={{ apache_service_conf_dir }}/ports.conf
+    owner=root group=root mode=0644
+  notify: restart apache2
+  when: apache_service_http

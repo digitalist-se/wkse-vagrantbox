@@ -1,0 +1,9 @@
+---
+# tasks file for redis
+- include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install redis
+  action: "{{ ansible_pkg_mgr }} name={{ redis_package_name }} state=installed"
+
+- name: Ensure redis running
+  service: name={{ redis_service_name }} enabled=yes state=started

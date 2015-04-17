@@ -1,0 +1,8 @@
+---
+# tasks file for php
+  - include_vars: "{{ ansible_distribution }}.yml"
+
+  - name: Setup PHP
+    action: "{{ ansible_pkg_mgr }} name={{item}} state=installed"
+    with_items: php_packages
+

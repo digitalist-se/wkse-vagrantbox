@@ -1,0 +1,5 @@
+---
+apache_service_name: httpd
+apache_service_conf_dir: /etc/httpd/conf.d
+apache_service_dir: /etc/httpd
+apache_service_vhost_dir: /etc/httpd/conf.d

@@ -1,0 +1,23 @@
+NameVirtualHost *:{{ apache_service_http_port }}
+
+<VirtualHost *:{{ apache_service_http_port }}>
+  ServerName {{ server_hostname }}
+  DocumentRoot {{ drupal_root }}
+  <Directory {{ drupal_root }}>
+    # Allow from all as default.
+      <IfVersion < 2.4>
+      Allow from all
+      </IfVersion>
+      <IfVersion >= 2.4>
+          Require all granted
+      </IfVersion>
+      AllowOverride All
+    # Allow symlinks.
+    Options FollowSymLinks
+    # Set the default handler.
+    DirectoryIndex index.php
+
+    # Make Drupal handle any 404 errors.
+    ErrorDocument 404 /index.php
+  </Directory>
+</VirtualHost>

@@ -1,0 +1,3 @@
+---
+varnish_service_name: varnish
+varnish_package_name: varnish

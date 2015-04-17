@@ -1,0 +1,8 @@
+---
+systools_packages:
+  - postfix
+  - git-core
+  - rsync
+  - unzip
+  - vim-enhanced
+  - curl

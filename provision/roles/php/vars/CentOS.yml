@@ -1,0 +1,13 @@
+---
+php_packages:
+  - php55w
+  - php55w-cli
+  - php55w-opcache
+  - php55w-common
+  - php55w-gd
+  - php55w-mbstring
+  - php55w-mcrypt
+  - php55w-pecl-memcache
+  - php55w-xml
+  - php55w-pdo
+  - php55w-mysql

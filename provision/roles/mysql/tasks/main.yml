@@ -1,0 +1,49 @@
+---
+# tasks file for mysql
+#  - name: Ensure mysql conf directory exists
+#    file: path=/etc/mysql/conf.d state=directory owner=root
+
+#  - name: Install local MySQL config
+#    template: src=mysql_innodb.j2 dest=/etc/mysql/conf.d/innodb.cnf owner=root
+
+#  - name: Remove MYSQL old ib_logfile? log files, if present
+#    file: dest={{ item }} state=absent
+#    with_items:
+#      - /var/lib/mysql/ib_logfile0
+#      - /var/lib/mysql/ib_logfile1
+
+
+  - include_vars: "{{ansible_distribution}}.yml"
+
+  - name: Setup MySQL
+    action: "{{ ansible_pkg_mgr }} name={{ item }} state=installed"
+    with_items: mysql_packages
+
+
+  - name: "Ensure mysql running."
+    service: name={{ mysql_service_name }} state=running
+
+  - name: "Set the root password."
+    action: mysql_user user=root password={{ mysql_root_password }}
+    ignore_errors: true
+
+  - name: "Delete anonymous MySQL server user for server host."
+    action: mysql_user user="" host="{{ server_hostname }}" state="absent" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Delete anonymous MySQL server user for localhost."
+    action: mysql_user user="" state="absent" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Secure the MySQL root user for IPV6 localhost (::1)."
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="::1" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Secure the MySQL root user for IPV4 localhost (127.0.0.1)."
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="127.0.0.1" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Secure the MySQL root user for localhost domain (localhost)."
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="localhost" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Secure the MySQL root user for server host domain."
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="{{ server_hostname }}" login_user=root login_password={{ mysql_root_password }}
+
+  - name: "Remove the MySQL test database."
+    action: mysql_db db=test state=absent login_user=root login_password={{ mysql_root_password }}

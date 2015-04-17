@@ -1,0 +1,11 @@
+---
+# tasks file for drush
+
+  - name: Download drush
+    git: repo=https://github.com/drush-ops/drush.git dest=/usr/share/drush
+
+  - name: Install drush dependencies
+    shell: /usr/local/bin/composer update chdir=/usr/share/drush
+
+  - name: Link drush
+    file: src=/usr/share/drush/drush dest=/usr/bin/drush state=link

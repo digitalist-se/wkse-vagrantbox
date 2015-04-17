@@ -1,0 +1,35 @@
+---
+# tasks file for composer
+- name: Install Composer globally
+  shell: curl -sS https://getcomposer.org/installer | /usr/bin/php && /bin/mv -f composer.phar /usr/local/bin/composer creates=/usr/local/bin/composer
+  tags: [composer, php]
+
+- name: Create global .composer folder
+  file: path={{ composer_user_home }}/.composer owner={{ composer_user }} state=directory
+  tags: [composer, php]
+
+#- name: Create global composer.json file
+#  template: src=composer.j2 dest={{ composer_user_home }}/.composer/composer.json owner={{ composer_user }}
+#  register: create_composer_file
+#  tags: [composer, php]
+
+- name: Create stub composer.json
+  shell: /usr/local/bin/composer global init -n -s dev
+  sudo_user: "{{ composer_user }}"
+  register: create_composer_json
+
+- name: Setup Github OAuth
+  shell: /usr/local/bin/composer -g config github-oauth.github.com b71deedcd476c09bab349e083ca0c336aaa62886
+  when: create_composer_json|changed
+  sudo_user: "{{ composer_user }}"
+  tags: [composer, php]
+
+#- name: Install the composer.json file only if it was updated
+#  shell: /usr/local/bin/composer global update --no-interaction --no-ansi
+#  when: create_composer_file|changed
+#  sudo_user: "{{ composer_user }}"
+
+- name: Add global composer bin directory to PATH
+  lineinfile: dest={{composer_user_home}}/.bashrc line="export PATH=~/.composer/vendor/bin:$PATH"
+  register: composerinstalled
+  tags: [composer, php]

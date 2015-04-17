@@ -1,0 +1,15 @@
+---
+# tasks file for varnish
+- include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install varnish
+  action: "{{ ansible_pkg_mgr }} name=varnish state=installed"
+
+- template:
+    src=default.vcl
+    dest=/etc/varnish/default.vcl
+    owner=root group=root mode=0644
+- template:
+    src=varnish
+    dest=/etc/default/varnish
+    owner=root group=root mode=0644
